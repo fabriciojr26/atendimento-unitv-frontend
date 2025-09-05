@@ -8,7 +8,8 @@
   <meta property="og:title" content="UniTV — Ativação">
   <meta property="og:description" content="PIX aprovado • Acesso em minutos • Suporte que resolve.">
   <meta property="og:type" content="website">
-  <link rel="icon" href="logo.png">
+  <!-- O logo precisa ser hospedado online ou estar na mesma pasta que este arquivo -->
+  <link rel="icon" href="logo.jpg">
   <style>
     :root{
       --bg:#0B0D12;--txt:#F5F7FA;--muted:#9AA3AF;--accent:#FFD100;--card:#121622;--border:#23283B;
@@ -25,7 +26,7 @@
     .brand-text{font-weight:800;letter-spacing:.3px}
     .warn{background:#201A00;border:1px solid #3A2A00;color:#FFD56A;padding:10px 14px;border-radius:12px;font-size:1rem;margin:10px 0 16px}
     .plans{display:grid;gap:14px}
-    .plan-btn{position:relative;display:flex;justify-content:space-between;align-items:center;padding:22px 18px;border-radius:18px;border:1px solid var(--border);background:linear-gradient(135deg,var(--btn-grad1),var(--btn-grad2));box-shadow:0 10px 18px rgba(0,0,0,.28);cursor:pointer;outline:none;transform:translateY(0);opacity:0.99;color:var(--txt);min-height:104px}
+    .plan-btn{position:relative;display:flex;justify-content:space-between;align-items:center;padding:22px 18px;border-radius:18px;border:1px solid var(--border);background:linear-gradient(135deg,var(--btn-grad1),var(--btn-grad2));box-shadow:0 10px 18px rgba(0,0,0,.28);cursor:pointer;outline:none;transform:translateY(0);opacity:0.99;color:var(--txt);min-height:104px; text-align: left; width: 100%; font-size: inherit; font-family: inherit;}
     .plan-btn::before{content:'';position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--accent);border-radius:18px 0 0 18px}
     .plan-btn .label,.plan-btn .price{color:var(--txt)}
     .plan-btn .label{font-weight:900;font-size:1.2rem;letter-spacing:.2px}
@@ -46,15 +47,13 @@
     .sheet .bullets li{margin:6px 0}
     .sheet .faq dt{font-weight:700;margin-top:10px}
     .sheet .faq dd{margin:2px 0 8px;color:var(--muted)}
-    .sheet .cta-bar{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(0deg, rgba(11,13,18,.98), rgba(11,13,18,.95));border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:10px}
-    .btn{appearance:none;border:none;border-radius:12px;padding:12px 14px;font-weight:800;color:#0b0d12;cursor:pointer}
+    .sheet .cta-bar{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(0deg, rgba(11,13,18,.98), rgba(11,13,18,.95));border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:10px; z-index: 10;}
+    .btn{appearance:none;border:none;border-radius:12px;padding:12px 14px;font-weight:800;color:#0b0d12;cursor:pointer; flex: 1;}
     .btn-primary{background:var(--accent)}
     .btn-secondary{background:#2B324D;color:#E7ECF3}
     .muted{color:var(--muted)}
     body.variant-c .plan-btn, body.variant-c .plan-btn .label, body.variant-c .plan-btn .price{background:var(--accent);color:#0b0d12}
     @media (min-width:480px){ .plans{grid-template-columns:repeat(2,1fr)} .plan-btn{min-height:110px} }
-
-    /* styles.css — complementares v4 */
   </style>
 
   <!-- Meta Pixel (ativo) -->
@@ -64,7 +63,7 @@
   n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
   t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init','222356937447578');
+  fbq('init','222356937447578'); // SEU PIXEL ID AQUI
   fbq('track','PageView');
   </script>
   <noscript><img height="1" width="1" style="display:none"
@@ -79,7 +78,8 @@
     </div>
 
     <h1>
-      <img src="logo.png" alt="UniTV" class="brand-logo">
+      <!-- O logo precisa estar acessível publicamente -->
+      <img src="logo.jpg" alt="UniTV" class="brand-logo">
       <span class="brand-text">UniTV</span>
     </h1>
 
@@ -207,11 +207,10 @@
     </div>
   </section>
 
-  <script>window.dataLayer = window.dataLayer || [];</script>
-  <script defer>
-    // app.js — UniTV LP Fantasma v4 (Pixel ativo)
+  <script>
+    // app.js — Lógica da página
     (() => {
-      const PHONE_E164 = "5591993460263"; // WhatsApp E.164
+      const PHONE_E164 = "5591993460263"; // Número de WhatsApp para contato
       const PLAN_MESSAGES = {
         essencial: "Quero ativar o Plano R$10/mês agora. PIX ok.",
         combos: "Quero ativar um Combo (3/6/12 meses). PIX ok."
@@ -238,13 +237,7 @@
         const base = `https://wa.me/${PHONE_E164}`;
         const msgBase = PLAN_MESSAGES[plan] || "Quero ativar agora.";
         const msg = `${msgBase}${utmSuffix()}`.trim();
-        const url = `${base}?text=${encodeURIComponent(msg)}`;
-        window.dataLayer.push({event: "WhatsAppClick", plan, action});
-        if (typeof fbq === 'function') {
-          try { fbq('trackCustom','WhatsAppClick',{plan, action}); } catch(e){}
-          try { fbq('track','Contact'); } catch(e){}
-        }
-        return url;
+        return `${base}?text=${encodeURIComponent(msg)}`;
       }
 
       const backdrop = document.getElementById("sheetBackdrop");
@@ -262,7 +255,6 @@
         lockBody(true);
         const focusEl = sheetEl.querySelector(".btn-primary") || sheetEl.querySelector("button");
         if (focusEl) focusEl.focus();
-        window.dataLayer.push({event: "ViewPlanSheet", plan});
         if (typeof fbq === 'function') { try { fbq('trackCustom','ViewPlanSheet',{plan}); } catch(e){} }
       }
       function closeDialog(sheetEl) {
@@ -274,6 +266,7 @@
 
       backdrop.addEventListener("click", () => { if (openSheet) closeDialog(openSheet); });
       window.addEventListener("keydown", (e) => { if (e.key === "Escape" && openSheet) closeDialog(openSheet); });
+      
       document.querySelectorAll(".sheet").forEach(sheet => {
         sheet.addEventListener("touchstart", (e) => { startY = e.touches[0].clientY; }, {passive:true});
         sheet.addEventListener("touchmove", (e) => {
@@ -290,7 +283,6 @@
         const targetId = btn.getAttribute("aria-controls");
         const sheet = document.getElementById(targetId);
         if (sheet) {
-          window.dataLayer.push({event:"PlanSelected", plan});
           if (typeof fbq === 'function') { try { fbq('trackCustom','PlanSelected',{plan}); } catch(e){} }
           openDialog(sheet, plan);
         }
@@ -303,28 +295,26 @@
           const action = btn.dataset.action;
           const plan = btn.dataset.plan;
           const url = buildWaLink(plan, action);
+          // O capi-hook.js irá interceptar este clique, enviar os eventos e depois a navegação continua
           window.location.href = url;
         });
       });
 
       window.addEventListener("load", () => {
+        getUTMs(); // Pega os UTMs no carregamento da página
         document.querySelectorAll(".kick").forEach(el => { setTimeout(() => el.classList.remove("kick"), 900); });
       });
     })();
   </script>
+  
   <script defer>
-    // capi-hook.js
-    // Drop-in client hook to generate eventID, fire Pixel (if present)
-    // and send the same event to CAPI via sendBeacon/fetch BEFORE navigation.
-    // Include AFTER your app.js <script>.
-    //
-    // It listens to clicks on buttons inside bottom sheets with [data-action][data-plan].
-    // Works alongside your existing handlers.
-
+    // capi-hook.js — Lógica de envio para o Pixel e CAPI
     (function () {
+      // IMPORTANTE: Cole aqui a URL do seu servidor back-end que está na Koyeb.
+      const BACKEND_URL = "https://bored-lolly-fabriciojunior.koyeb.app/api/capi"; 
+
       function uuidv4() {
         if (crypto && typeof crypto.randomUUID === "function") return crypto.randomUUID();
-        // Fallback RFC4122-ish
         return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
           const r = (Math.random() * 16) | 0;
           const v = c === "x" ? r : (r & 0x3) | 0x8;
@@ -340,13 +330,9 @@
       function getUTMs() {
         const keys = ["utm_source", "utm_medium", "utm_campaign"];
         const u = {};
-        const qs = new URLSearchParams(location.search);
         keys.forEach((k) => {
-          const v = qs.get(k) || sessionStorage.getItem(k);
-          if (v) {
-            u[k] = v;
-            sessionStorage.setItem(k, v);
-          }
+          const v = sessionStorage.getItem(k);
+          if (v) u[k] = v;
         });
         const parts = [];
         if (u.utm_source) parts.push("source=" + u.utm_source);
@@ -356,19 +342,21 @@
       }
 
       function sendCapi(payload) {
-        const url = "/.netlify/functions/capi";
-        const body = JSON.stringify(payload);
-        if (navigator.sendBeacon) {
-          const blob = new Blob([body], { type: "application/json" });
-          navigator.sendBeacon(url, blob);
-        } else {
-          fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body });
+        if (BACKEND_URL === "URL_DO_SEU_BACKEND_VAI_AQUI/api/capi") {
+          console.warn("CAPI: URL do backend ainda não configurada no index.html");
+          return;
         }
+
+        const body = JSON.stringify(payload);
+        fetch(BACKEND_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body,
+          keepalive: true, // Garante que a requisição continua mesmo se a página fechar
+        }).catch(error => console.error('Erro ao enviar evento CAPI:', error));
       }
 
-      document.addEventListener(
-        "click",
-        function (e) {
+      document.addEventListener("click", function (e) {
           const btn = e.target.closest("button[data-action][data-plan]");
           if (!btn) return;
 
@@ -376,39 +364,29 @@
           const action = btn.getAttribute("data-action");
           const eventID = uuidv4();
 
-          // Fire Pixel (if present) with eventID for dedup
-          try {
-            if (window.fbq) {
-              window.fbq("trackCustom", "WhatsAppClick", { eventID, plan, action });
+          // 1. Dispara o Pixel do navegador com um event_id
+          if (typeof fbq === 'function') {
+            try {
+              fbq('trackCustom', 'WhatsAppClick', { plan, action }, { eventID: eventID });
+              fbq('track', 'Contact', {}, { eventID: eventID + '_contact' }); // Evento padrão
+            } catch (err) {
+              console.error("Erro ao disparar fbq:", err);
             }
-          } catch (err) {
-            // no-op
           }
 
-          // Build user_data helpers
-          const fbp = getCookie("_fbp");
-          const fbcCookie = getCookie("_fbc");
-          const qs = new URLSearchParams(location.search);
-          const fbclid = qs.get("fbclid");
-          const utm = getUTMs();
-          const phone =
-            window.PHONE_E164 ||
-            (typeof PHONE_E164 !== "undefined" ? PHONE_E164 : null);
-
-          // Ship to CAPI (server)
+          // 2. Envia os dados para o nosso servidor de backend (CAPI)
           sendCapi({
             event_name: "WhatsAppClick",
-            event_id: eventID, // must match the Pixel eventID
+            event_id: eventID, // Mesmo event_id para deduplicação
             plan,
             action,
-            utm,
-            phone,
-            fbp,
-            fbc: fbcCookie,
-            fbclid
+            utm: getUTMs(),
+            fbp: getCookie("_fbp"),
+            fbc: getCookie("_fbc"),
+            fbclid: new URLSearchParams(location.search).get("fbclid")
           });
         },
-        true // capture so we run before your navigation
+        true // Usa 'capture: true' para garantir que este código rode antes da navegação para o WhatsApp
       );
     })();
   </script>
